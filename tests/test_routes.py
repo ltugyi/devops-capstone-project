@@ -182,10 +182,7 @@ class TestAccountService(TestCase):
         """It should not Update an Account that is not found"""
         account = AccountFactory()
         data = account.serialize()
-        response = self.client.put(
-          f"{BASE_URL}/1",
-          json = data
-        )
+        response = self.client.put(f"{BASE_URL}/1", json = data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_an_account(self):
