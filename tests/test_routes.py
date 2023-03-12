@@ -126,6 +126,7 @@ class TestAccountService(TestCase):
     # ADD YOUR TEST CASES HERE ...
     def test_read_an_account(self):
         """It should Read a single Account"""
+        #create an account for the test
         account = self._create_accounts(1)[0]
         response = self.client.get(
             f"{BASE_URL}/{account.id}", content_type="application/json"
@@ -136,11 +137,12 @@ class TestAccountService(TestCase):
 
     def test_get_account_not_found(self):
         """It should not Read an Account that is not found"""
-        resp = self.client.get(f"{BASE_URL}/0")
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+        response = self.client.get(f"{BASE_URL}/0")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_read_all_account(self):
         """It should Read all Account"""
+        #create 10 accounts for the test
         account = self._create_accounts(10)
         response = self.client.get(f"{BASE_URL}/all")
         data = response.get_json()
@@ -148,4 +150,37 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(data), 10)
 
+    def test_update_an_account(self):
+        """It should Update a single Account"""
+        #create an account for the test
+        account = self._create_accounts(1)[0]
+        response = self.client.get(
+            f"{BASE_URL}/{account.id}", content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(data["name"], account.name)
+        data["name"] = "Changed Name"
+        response = self.client.put(
+            f"{BASE_URL}/{account.id}",
+            json=data
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.get(
+            f"{BASE_URL}/{account.id}", content_type="application/json"
+        )
+        changed_account = response.get_json()
+        self.assertEqual(changed_account["name"], "Changed Name")
+
+    def test_update_account_not_found(self):
+        """It should not Update an Account that is not found"""
+        account = AccountFactory()
+        data = account.serialize()
+        response = self.client.put(
+            f"{BASE_URL}/1",
+            json = data
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
                     
