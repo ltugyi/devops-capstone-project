@@ -60,15 +60,25 @@ def create_accounts():
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
+@app.route("/accounts/all", methods=["GET"])
+def list_account():
+    """
+    Reads all Accounts
+    This endpoint will read all Accounts
+    """
+    app.logger.info("Request to read all Accounts")
 
-# ... place you code here to LIST accounts ...
+    accounts = Account.all()
+    list_account =[account.serialize() for account in accounts]
+
+    app.logger.info("Return a list of dictionary with %s members", len(list_account))
+    
+    return jsonify(list_account), status.HTTP_200_OK
 
 
 ######################################################################
 # READ AN ACCOUNT
 ######################################################################
-
-# ... place you code here to READ an account ...
 @app.route("/accounts/<int:account_id>", methods=["GET"])
 def get_accounts(account_id):
     """
@@ -78,9 +88,10 @@ def get_accounts(account_id):
     app.logger.info("Request to read an Account with id: %s", account_id)
 
     account = Account.find(account_id)
+
     if not account:
         abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
-    
+
     return account.serialize(), status.HTTP_200_OK
 
 ######################################################################
