@@ -131,7 +131,7 @@ class TestAccountService(TestCase):
     # ADD YOUR TEST CASES HERE ...
     def test_read_an_account(self):
         """It should Read a single Account"""
-        #create an account for the test
+        # create an account for the test
         account = self._create_accounts(1)[0]
         response = self.client.get(
             f"{BASE_URL}/{account.id}", content_type="application/json"
@@ -147,8 +147,8 @@ class TestAccountService(TestCase):
 
     def test_read_all_account(self):
         """It should Read all Account"""
-        #create 10 accounts for the test
-        account = self._create_accounts(10)
+        # create 10 accounts for the test
+        self._create_accounts(10)
         response = self.client.get(BASE_URL)
         data = response.get_json()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -156,7 +156,7 @@ class TestAccountService(TestCase):
 
     def test_update_an_account(self):
         """It should Update a single Account"""
-        #create an account for the test
+        # create an account for the test
         account = self._create_accounts(1)[0]
         response = self.client.get(
             f"{BASE_URL}/{account.id}", content_type="application/json"
@@ -183,16 +183,16 @@ class TestAccountService(TestCase):
         account = AccountFactory()
         data = account.serialize()
         response = self.client.put(
-            f"{BASE_URL}/1",
-            json = data
+          f"{BASE_URL}/1",
+          json = data
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_an_account(self):
         """It should Delete a single Account"""
-        #create an account for the test
+        # create an account for the test
         account = self._create_accounts(1)[0]
-        #delete the account
+        # delete the account
         response = self.client.delete(f"{BASE_URL}/{account.id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -226,4 +226,3 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Check for the CORS header
         self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
-        
