@@ -57,6 +57,7 @@ def create_accounts():
         jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
     )
 
+
 ######################################################################
 # LIST ALL ACCOUNTS
 ######################################################################
@@ -69,10 +70,10 @@ def list_account():
     app.logger.info("Request to read all Accounts")
 
     accounts = Account.all()
-    list_account =[account.serialize() for account in accounts]
+    list_account = [account.serialize() for account in accounts]
 
     app.logger.info("Return a list of dictionary with %s members", len(list_account))
-    
+
     return jsonify(list_account), status.HTTP_200_OK
 
 
@@ -94,25 +95,26 @@ def get_accounts(account_id):
 
     return account.serialize(), status.HTTP_200_OK
 
+
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 @app.route("/accounts/<int:account_id>", methods=["PUT"])
 def update_accounts(account_id):
-        """
-        Update an Account
-        This endpoint will update an Account based the account_id that is requested
-        """
-        app.logger.info("Request to update an Account with id: %s", account_id)
+    """
+    Update an Account
+    This endpoint will update an Account based the account_id that is requested
+    """
+    app.logger.info("Request to update an Account with id: %s", account_id)
 
-        account = Account.find(account_id)
-        if not account:
-            abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
+    account = Account.find(account_id)
+    if not account:
+        abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
 
-        account.deserialize(request.get_json())
-        account.update()
+    account.deserialize(request.get_json())
+    account.update()
 
-        return account.serialize(), status.HTTP_200_OK
+    return account.serialize(), status.HTTP_200_OK
 
 
 ######################################################################
@@ -120,19 +122,18 @@ def update_accounts(account_id):
 ######################################################################
 @app.route("/accounts/<int:account_id>", methods=["DELETE"])
 def delete_accounts(account_id):
-        """
-        Delete an Account
-        This endpoint will delete an Account based on the account_id that is requested
-        """
-        app.logger.info("Request to delete an Account with id: %s", account_id)
+    """
+    Delete an Account
+    This endpoint will delete an Account based on the account_id that is requested
+    """
+    app.logger.info("Request to delete an Account with id: %s", account_id)
 
-        account = Account.find(account_id)
-        if not account:
-            abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
+    account = Account.find(account_id)
+    if not account:
+        abort(status.HTTP_404_NOT_FOUND, f"Account with id [{account_id}] could not be found.")
 
-        account.delete()
-        return "", status.HTTP_204_NO_CONTENT
-
+    account.delete()
+    return "", status.HTTP_204_NO_CONTENT
 
 
 ######################################################################
