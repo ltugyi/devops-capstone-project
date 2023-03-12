@@ -144,9 +144,8 @@ class TestAccountService(TestCase):
         """It should Read all Account"""
         #create 10 accounts for the test
         account = self._create_accounts(10)
-        response = self.client.get(f"{BASE_URL}/all")
+        response = self.client.get(BASE_URL)
         data = response.get_json()
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(data), 10)
 
